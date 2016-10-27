@@ -1,0 +1,51 @@
+data:
+  image: tianon/true
+  volumes:
+    - /var/lib/postgresql/data
+    - /usr/local/taiga/media
+    - /usr/local/taiga/static
+    - /usr/local/taiga/logs
+
+db:
+  image: postgres
+  environment:
+    POSTGRES_USER: taiga
+    POSTGRES_PASSWORD: password
+  volumes_from:
+    - data
+
+taigaback:
+  image: htdvisser/taiga-back:stable
+  hostname: 'taiga-agile.klabchina.net'
+  environment:
+    SECRET_KEY: examplesecretkey
+    EMAIL_USE_TLS: 'True'
+    EMAIL_HOST: smtp.klabchina.net
+    EMAIL_PORT: 465
+    EMAIL_HOST_USER: taiga-agile@klabchina.net
+    EMAIL_HOST_PASSWORD: Klab2016
+    FRONT_DOMAIN: 'taiga-agile.klabchina.net'
+    API_DOMAIN: 'taiga-agile.klabchina.net'
+  volumes_from:
+    - data
+  links: 
+    - 'db:postgres'
+  ports: 
+    - 0.0.0.0:8000:8000
+  expose:
+    - '8000'
+
+taigafront: 
+  image: htdvisser/taiga-front-dist:stable
+  hostname: 'taiga-agile.klabchina.net'
+  links:
+    - taigaback
+  volumes_from:
+    - data
+  expose: 
+    - '80'
+  ports:
+    - 0.0.0.0:80:80
+  environment: 
+    TAIGABACK_PORT_8000_TCP_ADDR: taigaback
+    API: 'http://taiga-agile.klabchina.net:8000/api/v1/'

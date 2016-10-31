@@ -10,7 +10,7 @@ db:
   image: postgres
   environment:
     POSTGRES_USER: taiga
-    POSTGRES_PASSWORD: password
+    POSTGRES_PASSWORD: klab2016
   volumes_from:
     - data
 
@@ -19,13 +19,15 @@ taigaback:
   hostname: 'taiga-agile.klabchina.net'
   environment:
     SECRET_KEY: examplesecretkey
-    EMAIL_USE_TLS: 'True'
+    EMAIL_USE_TLS: 'False'
     EMAIL_HOST: smtp.klabchina.net
-    EMAIL_PORT: 465
+    EMAIL_PORT: 25
     EMAIL_HOST_USER: taiga-agile@klabchina.net
     EMAIL_HOST_PASSWORD: Klab2016
     FRONT_DOMAIN: 'taiga-agile.klabchina.net'
-    API_DOMAIN: 'taiga-agile.klabchina.net'
+    API_DOMAIN: 'taiga-agile.klabchina.net'i
+    POSTGRES_PORT: 5432
+    POSTGRES_HOST: postgres
   volumes_from:
     - data
   links: 
